@@ -43,7 +43,6 @@ func ParseFilters(s Symbol) Symbol {
 				continue
 			}
 			s.MinNotional = mmf
-			//case "PERCENT_PRICE":
 		}
 	}
 	return s

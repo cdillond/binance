@@ -1,6 +1,6 @@
 package binance
 
-type Filter string
+type Filter interface{}
 
 const (
 	PRICE_FILTER           = "PRICE_FILTER"
@@ -54,7 +54,7 @@ type RawFilter struct {
 }
 
 // Price Filter
-type PriceFilter struct {
+type priceFilter struct {
 	FilterType string `json:"filterType"`
 	MinPrice   string `json:"minPrice"`
 	MaxPrice   string `json:"maxPrice"`
@@ -62,7 +62,7 @@ type PriceFilter struct {
 }
 
 // Percent Price
-type PercentPrice struct {
+type percentPrice struct {
 	FilterType     string `json:"filterType"`
 	MultiplierUp   string `json:"multiplierUp"`
 	MultiplierDown string `json:"multiplierDown"`
@@ -70,7 +70,7 @@ type PercentPrice struct {
 }
 
 // Percent Price By Side
-type PercentPriceBySide struct {
+type percentPriceBySide struct {
 	FilterType        string `json:"filterType"`
 	BidMultiplierUp   string `json:"bidMultiplierUp"`
 	BidMultiplierDown string `json:"bidMultiplierDown"`
@@ -80,7 +80,7 @@ type PercentPriceBySide struct {
 }
 
 // Lot Size
-type LotSize struct {
+type lotSize struct {
 	FilterType string `json:"filterType"`
 	MinQty     string `json:"minQty"`
 	MaxQty     string `json:"maxQty"`
@@ -88,7 +88,7 @@ type LotSize struct {
 }
 
 // Type: Notional
-type Notional struct {
+type notional struct {
 	FilterType       string `json:"filterType"`
 	MinNotional      string `json:"minNotional"`
 	ApplyMinToMarket bool   `json:"applyMinToMarket"`
@@ -98,46 +98,46 @@ type Notional struct {
 }
 
 // Type: MinNotional
-type MinNotional struct {
+type minNotional struct {
 	FilterType    string `json:"filterType"`
 	MinNotional   string `json:"minNotional"`
 	ApplyToMarket bool   `json:"applyToMarket"`
 	AvgPriceMins  int    `json:"avgPriceMins"`
 }
 
-type IcebergParts struct {
+type icebergParts struct {
 	FilterType string `json:"filterType"`
 	Limit      int    `json:"limit"`
 }
 
-type MarketLotSize struct {
+type marketLotSize struct {
 	FilterType string `json:"filterType"`
 	MinQty     string `json:"minQty"`
 	MaxQty     string `json:"maxQty"`
 	StepSize   string `json:"stepSize"`
 }
 
-type MaxNumOrders struct {
+type maxNumOrders struct {
 	FilterType string `json:"filterType"`
 	Limit      int    `json:"limit"`
 }
 
-type MaxNumAlgoOrders struct {
+type maxNumAlgoOrders struct {
 	FilterType       string `json:"filterType"`
 	MaxNumAlgoOrders int    `json:"maxNumAlgoOrders"`
 }
 
-type MaxNumIcebergOrders struct {
+type maxNumIcebergOrders struct {
 	FilterType          string `json:"filterType"`
 	MaxNumIcebergOrders int    `json:"maxNumIcebergOrders"`
 }
 
-type MaxPosition struct {
+type maxPosition struct {
 	FilterType  string `json:"filterType"`
 	MaxPosition string `json:"maxPosition"`
 }
 
-type TrailingDelta struct {
+type trailingDelta struct {
 	FilterType            string `json:"filterType"`
 	MinTrailingAboveDelta int    `json:"minTrailingAboveDelta"`
 	MaxTrailingAboveDelta int    `json:"maxTrailingAboveDelta"`
@@ -145,17 +145,17 @@ type TrailingDelta struct {
 	MaxTrailingBelowDelta int    `json:"maxTrailingBelowDelta"`
 }
 
-type ExchangeMaxNumOrders struct {
+type exchangeMaxNumOrders struct {
 	FilterType   string `json:"filterType"`
 	MaxNumOrders int    `json:"maxNumOrders"`
 }
 
-type ExchangeMaxAlgoOrders struct {
+type exchangeMaxAlgoOrders struct {
 	FilterType       string `json:"filterType"`
 	MaxNumAlgoOrders int    `json:"maxNumAlgoOrders"`
 }
 
-type ExchangeMaxNumIcebergOrders struct {
+type exchangeMaxNumIcebergOrders struct {
 	FilterType          string `json:"filterType"`
 	MaxNumIcebergOrders int    `json:"maxNumIcebergOrders"`
 }

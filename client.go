@@ -1,6 +1,7 @@
 // Package binance provides a lightweight wrapper for the Binance REST API.
 // It is a work in progress.
-// This package focuses on endpoints and functions allowed by the binance.us API, and it has not been tested on binance.com.
+// This package focuses on endpoints and functions allowed by the binance.us API, and is based on the
+// specification provided by Binance at https://docs.binance.us. It has not been tested on the binance.com API.
 package binance
 
 import (
