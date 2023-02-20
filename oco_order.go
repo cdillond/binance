@@ -2,6 +2,7 @@ package binance
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -79,8 +80,8 @@ func (o OCOOrder) submitOCO(c *Client) (string, error) {
 	return query, nil
 }
 
-func (c Client) TradeOCO(o OCOOrder) (bool, error) {
-	var res bool
+func (c Client) TradeOCO(o OCOOrder) (OCOTradeResp, error) {
+	var res OCOTradeResp
 	query, err := o.submitOCO(&c)
 	signature := c.Sign(query)
 	fmt.Println(query)
@@ -109,10 +110,12 @@ func (c Client) TradeOCO(o OCOOrder) (bool, error) {
 	if resp.StatusCode >= 400 {
 		e, err := ParseRespErr(b)
 		if err != nil {
-			return false, err
+			return res, err
 		}
 		return res, fmt.Errorf("%v %v", e.Code, e.Msg)
 	}
-	return true, nil
+
+	err = json.Unmarshal(b, &res)
+	return res, err
 
 }
