@@ -11,8 +11,8 @@ import (
 	"time"
 )
 
-func ParseRespErr(b []byte) (ErrResp, error) {
-	var e ErrResp
+func ParseRespErr(b []byte) (RespErr, error) {
+	var e RespErr
 	err := json.Unmarshal(b, &e)
 	return e, err
 }
@@ -23,7 +23,7 @@ func (c Client) Sign(s string) string {
 	return fmt.Sprintf("%x", mac.Sum(nil))
 }
 
-// returns nil error on successful connection
+// Returns a nil error on successful connection.
 func (c Client) Ping() error {
 	ctx, cancel := context.WithTimeout(context.Background(), c.RequestTimeout)
 	defer cancel()
@@ -51,8 +51,8 @@ func (c Client) Ping() error {
 	return nil
 }
 
-// Binance's API uses only milliseconds since the Unix Epoch
-// This function converts ints representing Binance's time format to time.Time objects
+// Binance's API uses only milliseconds since the Unix Epoch.
+// This function converts ints representing Binance's time format to time.Time objects.
 func Itot(i int) time.Time {
 	return time.Unix(0, int64(i)*1_000_000)
 }
