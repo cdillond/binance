@@ -34,9 +34,19 @@ type OCOOrder struct {
 }
 
 type OCOTradeResp struct {
-	OrderListId     int
-	ContingencyType string
-	ListStatusType  string
+	OrderListId       int    `json:"orderListId"`
+	ContingencyType   string `json:"contingencyType"`
+	ListStatusType    string `json:"listStatusType"`
+	ListOrderStatus   string `json:"listOrderStatus"`
+	ListClientOrderId string `json:"listClientOrderId"`
+	TransactionTime   int    `json:"transactionTime"`
+	Symbol            string `json:"symbol"`
+	Orders            []struct {
+		Symbol        string `json:"symbol"`
+		OrderId       int    `json:"orderId"`
+		ClientOrderId string `json:"clientOrderId"`
+	} `json:"orders"`
+	OrderReports []TradeFull `json:"orderReports"`
 }
 
 func NewOCOOrder(symbol string, side Side, quantity, price, stopPrice, StopLimitPrice float64) OCOOrder {
