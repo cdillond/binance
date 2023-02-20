@@ -20,7 +20,7 @@ type RecentTradesResp struct {
 }
 
 // Default limit is 500; value must be between 1 and 1,000
-func (c *Client) RecentTrades(symbol string, limit int) ([]RecentTradesResp, error) {
+func (c Client) RecentTrades(symbol string, limit int) ([]RecentTradesResp, error) {
 	q := "?symbol=" + symbol + "&limit=" + strconv.Itoa(limit)
 	ctx, cancel := context.WithTimeout(context.Background(), c.RequestTimeout)
 	defer cancel()

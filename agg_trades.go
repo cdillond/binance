@@ -22,7 +22,7 @@ type AggregateTrade struct {
 	IsBestMatch  bool    `json:"M"`
 }
 
-func (c *Client) AggregateTrades(symbol string, limit, fromId int, startTime, endTime time.Time) ([]AggregateTrade, error) {
+func (c Client) AggregateTrades(symbol string, limit, fromId int, startTime, endTime time.Time) ([]AggregateTrade, error) {
 	q := "?symbol=" + symbol + "&limit=" + strconv.Itoa(limit)
 
 	if fromId >= 0 {

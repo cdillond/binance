@@ -27,7 +27,7 @@ type Kline struct {
 // The fields for most return values are of an equivalent type as the original JSON response from the API;
 // not so with Klines. Because of the way the response is structured, it makes sense to typecast the
 // unmarshalled JSON to numeric types that are easier to work with.
-func (c *Client) Klines(symbol, interval string, limit int, startTime, endTime time.Time) ([]Kline, error) {
+func (c Client) Klines(symbol, interval string, limit int, startTime, endTime time.Time) ([]Kline, error) {
 	s, e := startTime.UnixMilli(), endTime.UnixMilli()
 	q := "?symbol=" + symbol +
 		"&interval=" + interval +

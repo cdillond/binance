@@ -10,7 +10,7 @@ import (
 )
 
 // Default limit is 500; value must be between 1 and 1,000. If fromId is negative, the most recent trades are used.
-func (c *Client) HistoricalTrades(symbol string, limit, fromId int) ([]RecentTradesResp, error) {
+func (c Client) HistoricalTrades(symbol string, limit, fromId int) ([]RecentTradesResp, error) {
 	q := "?symbol=" + symbol + "&limit=" + strconv.Itoa(limit)
 
 	if fromId >= 0 {

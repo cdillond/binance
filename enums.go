@@ -75,3 +75,32 @@ const (
 	HOUR   IntervalUnit = "h"
 	DAY    IntervalUnit = "d"
 )
+
+type OrderStatus string
+
+const (
+	NEW              OrderStatus = "NEW"
+	PARTIALLY_FILLED OrderStatus = "PARTIALLY_FILLED"
+	FILLED           OrderStatus = "FILLED"
+	CANCELED         OrderStatus = "CANCELED"
+	PENDING_CANCEL   OrderStatus = "PENDING_CANCEL"
+	REJECTED         OrderStatus = "REJECTED"
+	EXPIRED          OrderStatus = "EXPIRED"
+	EXPIRED_IN_MATCH OrderStatus = "EXPIRED_IN_MATCH"
+)
+
+type OCOListStatus string
+
+const (
+	RESPONSE     OCOListStatus = "RESPONSE"
+	EXEC_STARTED OCOListStatus = "EXEC_STARTED"
+	ALL_DONE     OCOListStatus = "ALL_DONE"
+)
+
+type OCOOrderStatus string
+
+const (
+	EXECUTING OCOOrderStatus = "EXECUTING"
+	DONE      OCOOrderStatus = "ALL_DONE"
+	REJECT    OCOOrderStatus = "REJECT"
+)

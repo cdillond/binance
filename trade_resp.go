@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-type ErrResp struct {
+type RespErr struct {
 	Code int    `json:"code"`
 	Msg  string `json:"msg"`
 }
