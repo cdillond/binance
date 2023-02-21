@@ -1,14 +1,14 @@
-// Defines types for responses sent by the binance websocket api.
-// The actual websocket client is not included in this package.
-package binance
+// Package websocket defines types for responses sent by the binance websocket api.
+// An actual websocket client is not included in this package.
+package websocket
 
 type StreamType interface {
 	AggTrade | KlineStream | TradeData | Ticker | MiniTicker |
-		WSPriceChange | []MiniTicker | []Ticker | WSBookTicker | WSBookDepth |
-		WSBookDepthUpdate | AccountUpdate | BalanceUpdate | OrderUpdatePayload
+		WSPriceChange | []MiniTicker | []Ticker | BookTicker | BookDepth |
+		BookDepthUpdate | AccountUpdate | BalanceUpdate | OrderUpdatePayload
 }
 
-type WsKline struct {
+type Kline struct {
 	StartTime             int     `json:"t"`        // Kline start time
 	CloseTime             int     `json:"T"`        // Kline close time
 	Symbol                string  `json:"s"`        // Symbol
@@ -28,10 +28,10 @@ type WsKline struct {
 }
 
 type KlineStream struct {
-	EventType string  `json:"e"` // Event type
-	EventTime int     `json:"E"` // Event time
-	Symbol    string  `json:"s"` // Symbol
-	K         WsKline `json:"k"`
+	EventType string `json:"e"` // Event type
+	EventTime int    `json:"E"` // Event time
+	Symbol    string `json:"s"` // Symbol
+	K         Kline  `json:"k"`
 }
 
 type StreamResp[S StreamType] struct {
@@ -124,7 +124,7 @@ type WSPriceChange struct {
 	NumTrades        int     `json:"n"`
 }
 
-type WSBookTicker struct {
+type BookTicker struct {
 	BookUpdateId int     `json:"u"`
 	Symbol       string  `json:"s"`
 	BestBidPrice float64 `json:"b,string"`
@@ -133,13 +133,13 @@ type WSBookTicker struct {
 	BestAskQty   float64 `json:"A,string"`
 }
 
-type WSBookDepth struct {
+type BookDepth struct {
 	LastUpdateId int        `json:"lastUpdateId"`
 	Bids         [][]string `json:"bids"`
 	Asks         [][]string `json:"asks"`
 }
 
-type WSBookDepthUpdate struct {
+type BookDepthUpdate struct {
 	EventType     string     `json:"e"`
 	EventTime     int        `json:"E"`
 	Symbol        string     `json:"s"`
