@@ -33,7 +33,7 @@ func NewClient(apiKey, secretKey string, baseUrl BaseUrl) (Client, error) {
 		return c, fmt.Errorf("could not properly initialize client; check internet connection %w", err)
 	}
 	for _, sym := range exinfo.Symbols {
-		c.Symbols[sym.Symbol] = ParseFilters(sym)
+		c.Symbols[sym.Symbol] = parseFilters(sym)
 	}
 	return c, nil
 }

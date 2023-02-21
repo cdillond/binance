@@ -28,12 +28,18 @@ type Kline struct {
 // not so with Klines. Because of the way the response is structured, it makes sense to typecast the
 // unmarshalled JSON to numeric types that are easier to work with.
 func (c Client) Klines(symbol, interval string, limit int, startTime, endTime time.Time) ([]Kline, error) {
-	s, e := startTime.UnixMilli(), endTime.UnixMilli()
 	q := "?symbol=" + symbol +
-		"&interval=" + interval +
-		"&limit=" + strconv.Itoa(limit) +
-		"&startTime=" + strconv.Itoa(int(s)) +
-		"&endTime=" + strconv.Itoa(int(e))
+		"&interval=" + interval
+	if limit > 0 {
+		q = q + "&limit=" + strconv.Itoa(limit)
+	}
+	if !startTime.IsZero() {
+		q = q + "&startTime=" + strconv.Itoa(int(startTime.UnixMilli()))
+	}
+	if !endTime.IsZero() {
+		q = q + "&endTime=" + strconv.Itoa(int(endTime.UnixMilli()))
+	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), c.RequestTimeout)
 	defer cancel()
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, string(c.BaseUrl)+KLINES+q, nil)

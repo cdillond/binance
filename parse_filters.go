@@ -6,7 +6,7 @@ import (
 )
 
 // MOVES FILTERS TO STRUCT FIELDS
-func ParseFilters(s Symbol) Symbol {
+func parseFilters(s Symbol) Symbol {
 	for _, f := range s.RawFilters {
 		ft, ok := f["filterType"]
 		if !ok {
