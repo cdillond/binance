@@ -3,7 +3,6 @@ package binance
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 )
@@ -69,11 +68,7 @@ func (c Client) exchangeInfo(queryString string) (ExchangeInfoResp, error) {
 	}
 	// REQUEST ERROR
 	if resp.StatusCode >= 400 {
-		e, err := ParseRespErr(b)
-		if err != nil {
-			return eir, err
-		}
-		return eir, fmt.Errorf("%v %v", e.Code, e.Msg)
+		return eir, parseRespErr(b)
 	}
 
 	err = json.Unmarshal(b, &eir)

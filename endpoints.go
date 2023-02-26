@@ -25,4 +25,5 @@ const (
 	BOOK_TICKER   = "/api/v3/ticker/bookTicker"
 	DAY_CHANGE    = "/api/v3/ticker/24hr"
 	TICKER        = "/api/v3/ticker"
+	USER_DATA     = "/api/v3/userDataStream"
 )

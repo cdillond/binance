@@ -4,8 +4,9 @@ package websocket
 
 type StreamType interface {
 	AggTrade | KlineStream | TradeData | Ticker | MiniTicker |
-		WSPriceChange | []MiniTicker | []Ticker | BookTicker | BookDepth |
-		BookDepthUpdate | AccountUpdate | BalanceUpdate | OrderUpdatePayload
+		PriceChange | []MiniTicker | []Ticker | BookTicker | BookDepth |
+		BookDepthUpdate | AccountUpdate | BalanceUpdate | ExecutionReport |
+		ListStatus | OutboundAccountPosition
 }
 
 type Kline struct {
@@ -98,7 +99,7 @@ type TradeData struct {
 	IsBuyerMaker  bool    `json:"m"`
 }
 
-type WSPriceChange struct {
+type PriceChange struct {
 	EventType        string  `json:"e"`
 	EventTime        int     `json:"E"`
 	Symbol           string  `json:"s"`
@@ -160,47 +161,41 @@ type AccountUpdate struct {
 	} `json:"B"`
 }
 
-type OrderUpdatePayload interface {
-	ExecutionReport | ListStatus
-}
-
 type ExecutionReport struct {
-	EventType         int     `json:"e"`
-	EventTime         int     `json:"E"`
-	Symbol            string  `json:"s"`
-	ClientOrderId     string  `json:"c"`
-	Side              string  `json:"S"`
-	OrderType         string  `json:"o"`
-	TimeInForce       string  `json:"f"`
-	OrderQty          float64 `json:"q,string"`
-	OrderPrice        float64 `json:"p,string"`
-	StopPrice         float64 `json:"P,string"`
-	TrailingDelta     int     `json:"d"`
-	IcebergQty        float64 `json:"F,string"`
-	OrderListId       int     `json:"g"`
-	OrigClientOrderId string  `json:"C"`
-	ExecType          string  `json:"x"`
-	OrderStatus       string  `json:"X"`
-	RejectReason      string  `json:"r"`
-	OrderID           int     `json:"i"`
-	LastExecQty       float64 `json:"l,string"`
-	CumQty            float64 `json:"z,string"`
-	LastExecPrc       float64 `json:"L,string"`
-	CommissionAmt     float64 `json:"n,string"`
-	CommissionAsset   string  `json:"N"`
-	TransactTime      int     `json:"T"`
-	TradeID           int     `json:"t"`
-
-	OnBook       bool `json:"w"`
-	IsTradeMaker bool `json:"m"`
-
+	EventType               string  `json:"e"`
+	EventTime               int     `json:"E"`
+	Symbol                  string  `json:"s"`
+	ClientOrderId           string  `json:"c"`
+	Side                    string  `json:"S"`
+	OrderType               string  `json:"o"`
+	TimeInForce             string  `json:"f"`
+	OrderQty                float64 `json:"q,string"`
+	OrderPrice              float64 `json:"p,string"`
+	StopPrice               float64 `json:"P,string"`
+	TrailingDelta           int     `json:"d"`
+	IcebergQty              float64 `json:"F,string"`
+	OrderListId             int     `json:"g"`
+	OrigClientOrderId       string  `json:"C"`
+	ExecType                string  `json:"x"`
+	OrderStatus             string  `json:"X"`
+	RejectReason            string  `json:"r"`
+	OrderID                 int     `json:"i"`
+	LastExecQty             float64 `json:"l,string"`
+	CumQty                  float64 `json:"z,string"`
+	LastExecPrc             float64 `json:"L,string"`
+	CommissionAmt           float64 `json:"n,string"`
+	CommissionAsset         string  `json:"N"`
+	TransactTime            int     `json:"T"`
+	TradeID                 int     `json:"t"`
+	OnBook                  bool    `json:"w"`
+	IsTradeMaker            bool    `json:"m"`
 	OrderCreationTime       int     `json:"O"`
 	CumQuoteQty             float64 `json:"Z,string"` // Cumulative quote asset transacted quantity
 	LastQuoteAmt            float64 `json:"Y,string"` // Last quote asset transacted quantity (i.e. lastPrice * lastQty)
 	QuoteOrderQty           float64 `json:"Q,string"`
 	SelfTradePreventionMode string  `json:"V"`
-	TrailingTime            string  `json:"D"`        // (Appears if the trailing stop order is active)
-	WorkingTime             string  `json:"W"`        // (Appears if the order is working on the order book)
+	TrailingTime            int     `json:"D"`        // (Appears if the trailing stop order is active)
+	WorkingTime             int     `json:"W"`        // (Appears if the order is working on the order book)
 	TradeGroupID            int     `json:"u"`        // (Appears if the order is working on the order book)
 	PreventMatchId          int     `json:"v"`        // (Appears if the order has expired due to STP trigger)
 	CounterOrderId          int     `json:"U"`        //  (Appears if the order has expired due to STP trigger)
@@ -217,7 +212,7 @@ type BalanceUpdate struct {
 }
 
 type ListStatus struct {
-	EventType       int    `json:"e"`
+	EventType       string `json:"e"`
 	EventTime       int    `json:"E"`
 	Symbol          string `json:"s"`
 	OrderListId     int    `json:"g"`
@@ -232,4 +227,15 @@ type ListStatus struct {
 		OrderId       int    `json:"i"`
 		ClientOrderId string `json:"c"`
 	} `json:"O"`
+}
+
+type OutboundAccountPosition struct {
+	EventType      string `json:"e"`
+	EventTime      int    `json:"E"`
+	LastUpdateTime int    `json:"u"`
+	Balances       []struct {
+		Asset  string  `json:"a"`
+		Free   float64 `json:"f,string"`
+		Locked float64 `json:"l,string"`
+	} `json:"B"`
 }

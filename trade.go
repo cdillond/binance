@@ -2,7 +2,6 @@ package binance
 
 import (
 	"context"
-	"fmt"
 	"io"
 	"net/http"
 )
@@ -35,14 +34,10 @@ func (c Client) Trade(o Order) (TradeResp, error) {
 
 	// REQUEST ERROR
 	if resp.StatusCode >= 400 {
-		e, err := ParseRespErr(b)
-		if err != nil {
-			return TradeResp{}, err
-		}
-		return res, fmt.Errorf("%v %v", e.Code, e.Msg)
+		return res, parseRespErr(b)
 	}
 
-	tf, err := ParseResp(b)
+	tf, err := parseResp(b)
 	if err != nil {
 		return res, err
 	}
@@ -78,14 +73,10 @@ func (c Client) TestTrade(o Order) (TradeResp, error) {
 
 	// REQUEST ERROR
 	if resp.StatusCode >= 400 {
-		e, err := ParseRespErr(b)
-		if err != nil {
-			return TradeResp{}, err
-		}
-		return res, fmt.Errorf("%v %v", e.Code, e.Msg)
+		return res, parseRespErr(b)
 	}
 
-	tf, err := ParseResp(b)
+	tf, err := parseResp(b)
 	if err != nil {
 		return res, err
 	}

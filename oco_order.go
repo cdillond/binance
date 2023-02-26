@@ -69,13 +69,43 @@ func (o OCOOrder) submitOCO(c *Client) (string, error) {
 	if !ok {
 		return query, fmt.Errorf("invalid symbol %v or improperly initialized client", o.Symbol)
 	}
+	var listCoid, limitCoid, limitIcebergQty, trailingDelta,
+		stopCoid, stopLimitPrice, stopLimitTIF, nort, stpm string
+	if o.ListClientOrderId != "" {
+		listCoid = "&listClientOrderId=" + o.ListClientOrderId
+	}
+	if o.LimitClientOrderId != "" {
+		limitCoid = "&limitClientOrderId=" + o.LimitClientOrderId
+	}
+	if o.LimitIcebergQty != 0 {
+		limitIcebergQty = "&limitIcebergQty=" + strconv.FormatFloat(o.LimitIcebergQty, 'f', pair.StepSize, 64)
+	}
+	if o.TrailingDelta != 0 {
+		trailingDelta = "&trailingDelta=" + strconv.Itoa(o.TrailingDelta)
+	}
+	if o.StopClientOrderId != "" {
+		stopCoid = "&stopClientOrderId=" + o.StopClientOrderId
+	}
+	if o.StopLimitPrice != 0 {
+		stopLimitPrice = "&stopLimitPrice=" + strconv.FormatFloat(o.StopLimitPrice, 'f', pair.TickSize, 64)
+	}
+	if o.StopLimitTimeInForce != "" {
+		stopLimitTIF = "&stopLimitTimeInForce=" + string(o.StopLimitTimeInForce)
+	}
+	if o.NewOrderRespType != "" {
+		nort = "&newOrderRespType=" + string(o.NewOrderRespType)
+	}
+	if o.SelfTradePreventionMode != "" {
+		stpm = "&selfTradePreventionMode=" + string(o.SelfTradePreventionMode)
+	}
+
 	query = "symbol=" + o.Symbol +
 		"&side=" + string(o.Side) +
 		"&quantity=" + strconv.FormatFloat(o.Quantity, 'f', pair.StepSize, 64) +
 		"&price=" + strconv.FormatFloat(o.Price, 'f', pair.TickSize, 64) +
 		"&stopPrice=" + strconv.FormatFloat(o.StopPrice, 'f', pair.TickSize, 64) +
-		"&stopLimitPrice=" + strconv.FormatFloat(o.StopLimitPrice, 'f', pair.TickSize, 64) +
-		"&stopLimitTimeInForce=" + string(o.StopLimitTimeInForce) +
+		listCoid + limitCoid + limitIcebergQty + trailingDelta + stopCoid +
+		stopLimitPrice + stopLimitTIF + nort + stpm +
 		"&timestamp=" + strconv.Itoa(int(o.Timestamp.UnixMilli()))
 	return query, nil
 }
@@ -108,11 +138,7 @@ func (c Client) TradeOCO(o OCOOrder) (OCOTradeResp, error) {
 
 	// REQUEST ERROR
 	if resp.StatusCode >= 400 {
-		e, err := ParseRespErr(b)
-		if err != nil {
-			return res, err
-		}
-		return res, fmt.Errorf("%v %v", e.Code, e.Msg)
+		return res, parseRespErr(b)
 	}
 
 	err = json.Unmarshal(b, &res)

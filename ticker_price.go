@@ -40,11 +40,7 @@ func (c Client) TickerPrice(symbol string) (TickerResp, error) {
 
 	// REQUEST ERROR
 	if resp.StatusCode >= 400 {
-		e, err := ParseRespErr(b)
-		if err != nil {
-			return res, err
-		}
-		return res, fmt.Errorf("%v %v", e.Code, e.Msg)
+		return res, parseRespErr(b)
 	}
 
 	err = json.Unmarshal(b, &res)
@@ -87,11 +83,7 @@ func (c Client) TickerPrices(symbols []string) ([]TickerResp, error) {
 
 	// REQUEST ERROR
 	if resp.StatusCode >= 400 {
-		e, err := ParseRespErr(b)
-		if err != nil {
-			return res, err
-		}
-		return res, fmt.Errorf("%v %v", e.Code, e.Msg)
+		return res, parseRespErr(b)
 	}
 
 	err = json.Unmarshal(b, &res)

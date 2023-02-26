@@ -3,7 +3,6 @@ package binance
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"strconv"
@@ -21,6 +20,7 @@ type RecentTradesResp struct {
 
 // Default limit is 500; value must be between 1 and 1,000
 func (c Client) RecentTrades(symbol string, limit int) ([]RecentTradesResp, error) {
+	var res []RecentTradesResp
 	q := "?symbol=" + symbol + "&limit=" + strconv.Itoa(limit)
 	ctx, cancel := context.WithTimeout(context.Background(), c.RequestTimeout)
 	defer cancel()
@@ -40,11 +40,7 @@ func (c Client) RecentTrades(symbol string, limit int) ([]RecentTradesResp, erro
 
 	// REQUEST ERROR
 	if resp.StatusCode >= 400 {
-		e, err := ParseRespErr(b)
-		if err != nil {
-			return []RecentTradesResp{}, err
-		}
-		return []RecentTradesResp{}, fmt.Errorf("%v %v", e.Code, e.Msg)
+		return res, parseRespErr(b)
 	}
 	var tr []RecentTradesResp
 	err = json.Unmarshal(b, &tr)

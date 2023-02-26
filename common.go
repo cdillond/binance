@@ -11,10 +11,21 @@ import (
 	"time"
 )
 
-func ParseRespErr(b []byte) (RespErr, error) {
-	var e RespErr
+//func ParseRespErr(b []byte) (RespErr, error) {
+//	var e RespErr
+//	err := json.Unmarshal(b, &e)
+//	return e, err
+//}
+
+func parseRespErr(b []byte) error {
+	var e respErr
 	err := json.Unmarshal(b, &e)
-	return e, err
+	if err != nil {
+		return fmt.Errorf("%w %v", ErrRespParse, string(b))
+	}
+	err = codeToError(e.Code)
+	return fmt.Errorf("%w %v", err, e.Msg)
+
 }
 
 func (c Client) Sign(s string) string {
@@ -42,11 +53,7 @@ func (c Client) Ping() error {
 	}
 	// REQUEST ERROR
 	if resp.StatusCode >= 400 {
-		e, err := ParseRespErr(b)
-		if err != nil {
-			return err
-		}
-		return fmt.Errorf("%v %v", e.Code, e.Msg)
+		return parseRespErr(b)
 	}
 	return nil
 }

@@ -6,11 +6,6 @@ import (
 	"fmt"
 )
 
-type RespErr struct {
-	Code int    `json:"code"`
-	Msg  string `json:"msg"`
-}
-
 // The Binance API responds to order creation requests with an error or at most one of an ACK, a RESULT, or a FULL response type, depending on the order type or
 // NewOrderRespType parameter. The order types ascend in size and provide increasingly detailed information. A FULL response contains all the information in a RESULT
 // response, and a RESULT response contains all the information in an ACK response. A TradeAck and TradeResult can be derived from any valid TradeResp with a RespType of "FULL", and soforth.
@@ -118,7 +113,7 @@ type TradeFull struct {
 	} `json:"fills"`
 }
 
-func ParseResp(b []byte) (TradeFull, error) {
+func parseResp(b []byte) (TradeFull, error) {
 	var v TradeFull
 	// try to unmarshal b to a TradeAck response
 	err := json.Unmarshal(b, &v)

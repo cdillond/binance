@@ -3,7 +3,6 @@ package binance
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"strconv"
@@ -44,12 +43,9 @@ func (c Client) OrderBookDepth(symbol string, limit int) (BookDepth, error) {
 
 	// REQUEST ERROR
 	if resp.StatusCode >= 400 {
-		e, err := ParseRespErr(b)
-		if err != nil {
-			return res, err
-		}
-		return res, fmt.Errorf("%v %v", e.Code, e.Msg)
+		return res, parseRespErr(b)
 	}
+	
 	var tr tmpBookDepth
 	err = json.Unmarshal(b, &tr)
 	if err != nil {

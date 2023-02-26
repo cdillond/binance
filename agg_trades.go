@@ -3,7 +3,6 @@ package binance
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"strconv"
@@ -48,12 +47,9 @@ func (c Client) AggregateTrades(symbol string, limit, fromId int, startTime, end
 
 	// REQUEST ERROR
 	if resp.StatusCode >= 400 {
-		e, err := ParseRespErr(b)
-		if err != nil {
-			return []AggregateTrade{}, err
-		}
-		return []AggregateTrade{}, fmt.Errorf("%v %v", e.Code, e.Msg)
+		return []AggregateTrade{}, parseRespErr(b)
 	}
+
 	var tr []AggregateTrade
 	err = json.Unmarshal(b, &tr)
 	return tr, err
