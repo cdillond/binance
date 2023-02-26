@@ -57,9 +57,9 @@ const (
 type Permission string
 
 const (
-	SPOT        Permission = "SPOT"
-	MARGIN      Permission = "MARGIN"
 	LEVERAGED   Permission = "LEVERAGED"
+	MARGIN      Permission = "MARGIN"
+	SPOT        Permission = "SPOT"
 	TRD_GRP_002 Permission = "TRD_GRP_002" // BINANCE.COM ONLY
 	TRD_GRP_003 Permission = "TRD_GRP_003" // BINANCE.COM ONLY
 	TRD_GRP_004 Permission = "TRD_GRP_004" // BINANCE.COM ONLY
