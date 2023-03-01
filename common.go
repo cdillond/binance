@@ -4,7 +4,6 @@ import (
 	"context"
 	"crypto/hmac"
 	"crypto/sha256"
-	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -16,17 +15,6 @@ import (
 //	err := json.Unmarshal(b, &e)
 //	return e, err
 //}
-
-func parseRespErr(b []byte) error {
-	var e respErr
-	err := json.Unmarshal(b, &e)
-	if err != nil {
-		return fmt.Errorf("%w %v", ErrRespParse, string(b))
-	}
-	err = codeToError(e.Code)
-	return fmt.Errorf("%w %v", err, e.Msg)
-
-}
 
 func (c Client) Sign(s string) string {
 	mac := hmac.New(sha256.New, []byte(c.SecretKey))
