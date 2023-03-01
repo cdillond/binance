@@ -12,7 +12,11 @@ type RespErr struct {
 }
 
 func (r RespErr) Error() string {
-	return codeToError(r.Code).Error()
+	return r.Msg
+}
+
+func (r RespErr) Unwrap() error {
+	return codeToError(r.Code)
 }
 
 func parseRespErr(b []byte) error {
