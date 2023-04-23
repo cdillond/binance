@@ -15,7 +15,7 @@ const (
 	OPEN_ORDER_LIST = "/api/v3/openOrderList"
 	OPEN_ORDERS     = "/api/v3/openOrders"
 	ORDER           = "/api/v3/order"
-	ORDER_LIST      = "api/v3/orderList"
+	ORDER_LIST      = "/api/v3/orderList"
 	PING            = "/api/v3/ping"
 	PRICE           = "/api/v3/ticker/price"
 	RECENT_TRADES   = "/api/v3/trades"
