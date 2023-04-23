@@ -9,6 +9,24 @@ import (
 	"time"
 )
 
+type CancellationResp struct {
+	Symbol                  string  `json:"symbol"`
+	OrigClientOrderId       string  `json:"origClientOrderId"`
+	OrderId                 int     `json:"orderId"`
+	OrderListId             int     `json:"orderListId"` //Unless part of an OCO, the value will always be -1.
+	ClientOrderId           string  `json:"clientOrderId"`
+	Price                   float64 `json:"price,string"`
+	OrigQty                 float64 `json:"origQty,string"`
+	ExecutedQty             float64 `json:"executedQty,string"`
+	CummulativeQuoteQty     float64 `json:"cummulativeQuoteQty,string"`
+	Status                  string  `json:"status"`
+	TimeInForce             string  `json:"timeInForce"`
+	OrderType               string  `json:"type"`
+	Side                    string  `json:"side"`
+	StopPrice               float64 `json:"stopPrice,string"` // might not be sent
+	SelfTradePreventionMode string  `json:"selfTradePreventionMode"`
+}
+
 type CancelOrderParams struct {
 	Symbol            string
 	OrderId           int
@@ -27,8 +45,8 @@ func NewCancelOrderParams(symbol string, orderId int, origClientOrderId string) 
 	}
 }
 
-func (c Client) CancelOrder(symbol string, orderId int) (TradeAck, error) {
-	var res TradeAck
+func (c Client) CancelOrder(symbol string, orderId int) (CancellationResp, error) {
+	var res CancellationResp
 	query := "symbol=" + symbol +
 		"&orderId=" + strconv.Itoa(orderId) +
 		"&timestamp=" + strconv.Itoa(int(time.Now().UnixMilli()))
@@ -60,8 +78,8 @@ func (c Client) CancelOrder(symbol string, orderId int) (TradeAck, error) {
 	return res, err
 }
 
-func (c Client) CancelOrder2(symbol string, clientOrderId string) (TradeAck, error) {
-	var res TradeAck
+func (c Client) CancelOrder2(symbol string, clientOrderId string) (CancellationResp, error) {
+	var res CancellationResp
 	query := "symbol=" + symbol +
 		"&origClientOrderId=" + clientOrderId +
 		"&timestamp=" + strconv.Itoa(int(time.Now().UnixMilli()))
@@ -93,8 +111,8 @@ func (c Client) CancelOrder2(symbol string, clientOrderId string) (TradeAck, err
 	return res, err
 }
 
-func (c Client) CancelOrder3(cop CancelOrderParams) (TradeAck, error) {
-	var res TradeAck
+func (c Client) CancelOrder3(cop CancelOrderParams) (CancellationResp, error) {
+	var res CancellationResp
 	var oid, coid, ncoid, recvw string
 	if cop.OrderId != 0 {
 		oid = "&orderId=" + strconv.Itoa(cop.OrderId)

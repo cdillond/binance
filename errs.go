@@ -1,6 +1,32 @@
 package binance
 
-import "errors"
+import (
+	"encoding/json"
+	"errors"
+	"fmt"
+)
+
+type RespErr struct {
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
+}
+
+func (r RespErr) Error() string {
+	return r.Msg
+}
+
+func (r RespErr) Unwrap() error {
+	return codeToError(r.Code)
+}
+
+func parseRespErr(b []byte) error {
+	var e RespErr
+	err := json.Unmarshal(b, &e)
+	if err != nil {
+		return fmt.Errorf("%w %v", ErrRespParse, string(b))
+	}
+	return e
+}
 
 var (
 	ErrUnknown           = errors.New("- 1000 UNKNOWN")
@@ -55,11 +81,6 @@ var (
 
 	ErrRespParse = errors.New("client could not parse error response from binance api")
 )
-
-type respErr struct {
-	Code int    `json:"code"`
-	Msg  string `json:"msg"`
-}
 
 func codeToError(i int) error {
 	switch i {
@@ -162,6 +183,6 @@ func codeToError(i int) error {
 	case 3:
 		return ErrWsBadJson
 	default:
-		return nil
+		return ErrRespParse
 	}
 }
